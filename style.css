@@ -1,0 +1,155 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #008cd2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* الكارت المقفول على مقاس الشاشة بالظبط */
+.app-container {
+    width: 100%;
+    max-width: 450px;
+    min-height: 100vh;
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+}
+
+.logo-box {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 10;
+    transition: opacity 0.4s ease-in-out;
+}
+
+.logo-box img {
+    width: 85px;
+    height: auto;
+    filter: invert(41%) sepia(82%) saturate(2453%) hue-rotate(176deg) brightness(96%) contrast(101%);
+}
+
+.profile-header {
+    width: 100%;
+    position: relative;
+    background-color: #ffffff;
+}
+
+.profile-header img {
+    width: 100%;
+    height: auto; 
+    display: block;
+    cursor: pointer;
+}
+
+/* تجهيز الفيديو ليكون بنفس أبعاد الصورة تماماً ومخفياً في البداية */
+#profile-video {
+    display: none;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+.fade-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, #008cd2 100%);
+}
+
+.info-section {
+    background-color: #008cd2;
+    padding: 15px 25px 35px 25px;
+    text-align: center;
+    color: #ffffff;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    transition: opacity 0.4s ease-in-out;
+}
+
+/* كلاس إخفاء واجهة البيانات أثناء تشغيل الفيديو */
+.hidden-ui {
+    opacity: 0 !important;
+    pointer-events: none;
+}
+
+.name {
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    text-transform: capitalize;
+}
+
+.title {
+    font-size: 14px;
+    font-weight: 400;
+    color: #e0f2fe;
+    letter-spacing: 1px;
+    margin-bottom: 25px;
+    text-transform: uppercase;
+}
+
+.cta-button {
+    width: 100%;
+    background: #ffffff;
+    color: #008cd2;
+    border: none;
+    padding: 15px;
+    border-radius: 50px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.cta-button:active {
+    transform: scale(0.98);
+}
+
+.social-icons {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transform: translateY(-10px);
+    transition: all 0.4s ease-in-out;
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+}
+
+.social-icons.show {
+    max-height: 50px;
+    opacity: 1;
+    transform: translateY(0);
+    margin-top: 25px;
+}
+
+.social-icons a {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.social-icons a:hover {
+    opacity: 0.8;
+}
+
+.social-icons a i {
+    font-size: 24px;
+    color: #ffffff;
+}

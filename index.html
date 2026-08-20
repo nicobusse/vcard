@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Nico - Vcard </title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!--       -->
+    <link rel="icon" type="image/png" href="logo.png">
+    
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="app-container">
+        <!--     -->
+        <div class="logo-box">
+            <img src="logo.png" alt="PKE Logo">
+        </div>
+
+        <!--       Easter Egg -->
+        <div class="profile-header">
+            <img id="profile-img" src="profile.jpeg" alt="Nico busse">
+            <video id="profile-video" src="intro.webm" playsinline preload="auto"></video>
+            <div class="fade-overlay"></div>
+        </div>
+
+        <!--     -->
+        <div class="info-section">
+            <h1 class="name"> Nico Busse </h1>
+            <h2 class="title">PKE Niederlassung Leiter</h2>
+            
+            <button class="cta-button" id="contact-btn">Kontakt</button>
+
+            <!--      -->
+            <div class="social-icons" id="social-icons">
+                <a href="https://wa.me/4915222851182" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                <a href="tel:+4915222851182"><i class="fas fa-phone"></i></a>
+                <a href="mailto:n.busse@pke-de.com"><i class="fas fa-envelope"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <!--       5    -->
+    <script>
+        const contactBtn = document.getElementById('contact-btn');
+        const socialIcons = document.getElementById('social-icons');
+
+        contactBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            socialIcons.classList.toggle('show');
+        });
+
+        document.addEventListener('click', () => {
+            socialIcons.classList.remove('show');
+        });
+
+        //      5 
+        const profileImg = document.getElementById('profile-img');
+        const profileVideo = document.getElementById('profile-video');
+        const infoSection = document.querySelector('.info-section');
+        const logoBox = document.querySelector('.logo-box');
+        const fadeOverlay = document.querySelector('.fade-overlay');
+
+        let tapCount = 0;
+        let tapTimer = null;
+
+        profileImg.addEventListener('click', () => {
+            tapCount++;
+            
+            clearTimeout(tapTimer);
+            tapTimer = setTimeout(() => {
+                tapCount = 0;
+            }, 1000);
+
+            if (tapCount === 5) {
+                tapCount = 0;
+                
+                //  
+                if (infoSection) infoSection.classList.add('hidden-ui');
+                if (logoBox) logoBox.classList.add('hidden-ui');
+                if (fadeOverlay) fadeOverlay.style.display = 'none';
+
+                //  
+                profileImg.style.display = 'none';
+                profileVideo.style.display = 'block';
+                profileVideo.currentTime = 0;
+                profileVideo.play();
+            }
+        });
+
+        //      
+        profileVideo.addEventListener('ended', () => {
+            profileVideo.style.display = 'none';
+            profileImg.style.display = 'block';
+            if (infoSection) infoSection.classList.remove('hidden-ui');
+            if (logoBox) logoBox.classList.remove('hidden-ui');
+            if (fadeOverlay) fadeOverlay.style.display = 'block';
+        });
+    </script>
+</body>
+</html>
