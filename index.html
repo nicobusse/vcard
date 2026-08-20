@@ -50,13 +50,6 @@
         contactBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             socialIcons.classList.toggle('show');
-
-            //       
-            if (socialIcons.classList.contains('show')) {
-                setTimeout(() => {
-                    socialIcons.scrollIntoView({ behavior: 'smooth', block: 'end' });
-                }, 100);
-            }
         });
 
         document.addEventListener('click', () => {
