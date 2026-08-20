@@ -29,7 +29,7 @@
         <!--     -->
         <div class="info-section">
             <h1 class="name"> Nico Busse </h1>
-            <h2 class="title">Leitung Niederlassung Düsseldorf - Köln  Prokurist</h2>
+            <h2 class="title">PKE Niederlassung Leiter</h2>
             
             <button class="cta-button" id="contact-btn">Kontakt</button>
 
@@ -50,6 +50,13 @@
         contactBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             socialIcons.classList.toggle('show');
+
+            //       
+            if (socialIcons.classList.contains('show')) {
+                setTimeout(() => {
+                    socialIcons.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                }, 100);
+            }
         });
 
         document.addEventListener('click', () => {
