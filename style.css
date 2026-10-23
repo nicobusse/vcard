@@ -4,30 +4,44 @@
     box-sizing: border-box;
 }
 
-body {
-    font-family: 'Montserrat', sans-serif;
-    background-color: #008cd2;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
+:root {
+    --blue: #008cd2;
+    --blue-light: #e0f2fe;
+    --white: #ffffff;
 }
 
-/* الكارت المقفول على مقاس الشاشة بالظبط */
+/* الصفحة كلها شاشة واحدة بالظبط – مفيش سكرول على أي تليفون */
+html,
+body {
+    height: 100%;
+    overflow: hidden;
+    overscroll-behavior: none;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: var(--blue);
+    display: flex;
+    justify-content: center;
+    -webkit-tap-highlight-color: transparent;
+}
+
 .app-container {
     width: 100%;
     max-width: 450px;
-    min-height: 100vh;
-    background: #ffffff;
+    height: 100vh;      /* للمتصفحات القديمة */
+    height: 100dvh;     /* الارتفاع الحقيقي للشاشة على الموبايل */
+    background: var(--blue);
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     position: relative;
+    overflow: hidden;
 }
 
+/* ===== اللوجو ===== */
 .logo-box {
     position: absolute;
-    top: 20px;
+    top: calc(20px + env(safe-area-inset-top, 0px));
     left: 20px;
     z-index: 10;
     transition: opacity 0.4s ease-in-out;
@@ -39,25 +53,32 @@ body {
     filter: invert(41%) sepia(82%) saturate(2453%) hue-rotate(176deg) brightness(96%) contrast(101%);
 }
 
+/* ===== الصورة: بتاخد كل المساحة الفاضية وتصغر/تكبر حسب الشاشة ===== */
 .profile-header {
-    width: 100%;
+    flex: 1 1 auto;
+    min-height: 0;
     position: relative;
-    background-color: #ffffff;
+    background-color: var(--white);
+    overflow: hidden;
 }
 
-.profile-header img {
+#profile-img {
     width: 100%;
-    height: auto; 
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
     display: block;
     cursor: pointer;
 }
 
-/* تجهيز الفيديو ليكون بنفس أبعاد الصورة تماماً ومخفياً في البداية */
 #profile-video {
     display: none;
+    position: absolute;
+    inset: 0;
     width: 100%;
-    height: auto;
+    height: 100%;
     object-fit: cover;
+    object-position: center top;
 }
 
 .fade-overlay {
@@ -65,91 +86,204 @@ body {
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 100px;
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, #008cd2 100%);
+    height: 90px;
+    background: linear-gradient(to bottom, rgba(0, 140, 210, 0) 0%, var(--blue) 100%);
+    pointer-events: none;
 }
 
+/* ===== الاسم والزرار ===== */
 .info-section {
-    background-color: #008cd2;
-    padding: 15px 25px 35px 25px;
+    flex: 0 0 auto;
+    padding: 4px 25px 0;
     text-align: center;
-    color: #ffffff;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
+    color: var(--white);
     transition: opacity 0.4s ease-in-out;
 }
 
-/* كلاس إخفاء واجهة البيانات أثناء تشغيل الفيديو */
 .hidden-ui {
     opacity: 0 !important;
     pointer-events: none;
 }
 
 .name {
-    font-size: 26px;
+    font-size: clamp(22px, 3.6vh, 28px);
     font-weight: 700;
-    margin-bottom: 8px;
-    text-transform: capitalize;
+    margin-bottom: 6px;
 }
 
 .title {
-    font-size: 14px;
+    font-size: clamp(11px, 1.8vh, 14px);
     font-weight: 400;
-    color: #e0f2fe;
+    line-height: 1.45;
+    color: var(--blue-light);
     letter-spacing: 1px;
-    margin-bottom: 25px;
+    margin-bottom: clamp(14px, 2.6vh, 24px);
     text-transform: uppercase;
 }
 
 .cta-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
     width: 100%;
-    background: #ffffff;
-    color: #008cd2;
-    border: none;
-    padding: 15px;
+    background: var(--white);
+    color: var(--blue);
+    text-decoration: none;
+    padding: clamp(12px, 2vh, 16px);
     border-radius: 50px;
-    font-size: 16px;
+    font-size: 17px;
     font-weight: 700;
-    cursor: pointer;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    transition: transform 0.15s ease;
+}
+
+.cta-button i {
+    font-size: 19px;
 }
 
 .cta-button:active {
-    transform: scale(0.98);
+    transform: scale(0.97);
 }
 
+/* ===== الأيقونات: ظاهرة دايمًا في آخر الشاشة ===== */
 .social-icons {
-    max-height: 0;
-    opacity: 0;
-    overflow: hidden;
-    transform: translateY(-10px);
-    transition: all 0.4s ease-in-out;
+    flex: 0 0 auto;
     display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: clamp(16px, 2.8vh, 26px) 30px calc(clamp(14px, 2.4vh, 22px) + env(safe-area-inset-bottom, 0px));
+}
+
+.social-icons a,
+.social-icons button {
+    display: flex;
+    align-items: center;
     justify-content: center;
-    gap: 25px;
-}
-
-.social-icons.show {
-    max-height: 50px;
-    opacity: 1;
-    transform: translateY(0);
-    margin-top: 25px;
-}
-
-.social-icons a {
-    color: #ffffff;
+    width: 48px;
+    height: 48px;
+    background: none;
+    border: none;
+    color: var(--white);
+    font-size: 26px;
+    cursor: pointer;
     text-decoration: none;
+}
+
+.social-icons a:active,
+.social-icons button:active {
+    opacity: 0.7;
+}
+
+.social-icons a:focus-visible,
+.social-icons button:focus-visible,
+.cta-button:focus-visible,
+.qr-close:focus-visible {
+    outline: 2px solid var(--white);
+    outline-offset: 3px;
+    border-radius: 12px;
+}
+
+/* الأيقونات بتقع لتحت (Easter Egg) */
+.social-icons.fall > * {
+    animation: icon-fall 0.7s cubic-bezier(0.55, 0, 1, 0.45) forwards;
+    animation-delay: calc(var(--i) * 80ms);
+    pointer-events: none;
+}
+
+/* الأيقونات بتطلع من تحت لما الفيديو يخلص */
+.social-icons.rise > * {
+    opacity: 0;
+    animation: icon-rise 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    animation-delay: calc(var(--i) * 80ms);
+}
+
+@keyframes icon-fall {
+    0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
+    18%  { transform: translateY(-10px) rotate(-6deg); opacity: 1; }
+    100% { transform: translateY(160px) rotate(25deg); opacity: 0; }
+}
+
+@keyframes icon-rise {
+    0%   { transform: translateY(160px); opacity: 0; }
+    70%  { transform: translateY(-8px); opacity: 1; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+/* ===== نافذة الـ QR ===== */
+.qr-modal {
+    position: absolute;
+    inset: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    background: rgba(0, 40, 70, 0.55);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.qr-modal.open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.qr-card {
+    width: 100%;
+    max-width: 300px;
+    background: var(--white);
+    border-radius: 24px;
+    padding: 26px 24px 20px;
+    text-align: center;
+    transform: translateY(20px) scale(0.96);
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.qr-modal.open .qr-card {
+    transform: none;
+}
+
+.qr-code svg {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.qr-card p {
+    margin-top: 14px;
     font-size: 14px;
-    font-weight: 400;
+    color: #335;
 }
 
-.social-icons a:hover {
-    opacity: 0.8;
+.qr-close {
+    margin-top: 16px;
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 50px;
+    background: var(--blue);
+    color: var(--white);
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
 }
 
-.social-icons a i {
-    font-size: 24px;
-    color: #ffffff;
+/* شاشات قصيرة جدًا (زي iPhone SE) */
+@media (max-height: 620px) {
+    .title { margin-bottom: 12px; }
+    .name { margin-bottom: 4px; }
+    .social-icons a,
+    .social-icons button { width: 42px; height: 42px; font-size: 23px; }
+}
+
+/* احترام إعداد تقليل الحركة */
+@media (prefers-reduced-motion: reduce) {
+    .social-icons.fall > * { animation: none; opacity: 0; }
+    .social-icons.rise > * { animation: none; opacity: 1; }
+    .qr-card { transition: none; }
 }

@@ -1,103 +1,115 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Nico - Vcard </title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <!--       -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Nico Busse – vCard</title>
     <link rel="icon" type="image/png" href="logo.png">
-    
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div class="app-container">
-        <!--     -->
+    <main class="app-container">
+        <!-- اللوجو -->
         <div class="logo-box">
             <img src="logo.png" alt="PKE Logo">
         </div>
 
-        <!--       Easter Egg -->
+        <!-- الصورة + الفيديو (Easter Egg) -->
         <div class="profile-header">
-            <img id="profile-img" src="profile.jpeg" alt="Nico">
+            <img id="profile-img" src="profile.jpeg" alt="Nico Busse">
             <video id="profile-video" src="intro.webm" playsinline preload="auto"></video>
             <div class="fade-overlay"></div>
         </div>
 
-        <!--     -->
-        <div class="info-section">
+        <!-- الاسم + المسمى + زرار حفظ الكونتاكت -->
+        <section class="info-section">
             <h1 class="name">Nico Busse</h1>
             <h2 class="title">Leitung Niederlassung<br>Düsseldorf - Köln<br>Prokurist</h2>
-            
-            <button class="cta-button" id="contact-btn">Kontakt</button>
 
-                        <div class="social-icons" id="social-icons">
-                 <a href="nico.vcf" download class="save-vcard">
-                    <i class="fa-solid fa-user-plus"></i>
-                <a href="https://wa.me/4915222851182" target="_blank"><i class="fab fa-whatsapp"></i></a>
-                <a href="tel:+4915222851182"><i class="fas fa-phone"></i></a>
-                <a href="mailto:n.busse@pke-de.com"><i class="fas fa-envelope"></i></a>
+            <a class="cta-button" href="nico.vcf" download="Nico-Busse.vcf">
+                <i class="fa-solid fa-user-plus"></i>
+                <span>Kontakt speichern</span>
+            </a>
+        </section>
+
+        <!-- الأيقونات: ظاهرة دايمًا في آخر الشاشة -->
+        <nav class="social-icons" id="social-icons" aria-label="Kontakt">
+            <a href="https://wa.me/4915222851182" target="_blank" rel="noopener" aria-label="WhatsApp" style="--i:0"><i class="fab fa-whatsapp"></i></a>
+            <a href="tel:+4915222851182" aria-label="Anrufen" style="--i:1"><i class="fas fa-phone"></i></a>
+            <a href="mailto:n.busse@pke-de.com" aria-label="E-Mail" style="--i:2"><i class="fas fa-envelope"></i></a>
+            <button type="button" id="qr-btn" aria-label="QR-Code anzeigen" style="--i:3"><i class="fas fa-qrcode"></i></button>
+        </nav>
+
+        <!-- نافذة الـ QR -->
+        <div class="qr-modal" id="qr-modal" aria-hidden="true">
+            <div class="qr-card" role="dialog" aria-label="QR-Code">
+                <div class="qr-code"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 33 33"><path stroke="#000" d="M2 2.5h7m2 0h3m1 0h3m3 0h2m1 0h7m-29 1h1m5 0h1m2 0h1m3 0h4m5 0h1m5 0h1m-29 1h1m1 0h3m1 0h1m1 0h6m1 0h1m6 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m1 0h1m5 0h2m1 0h1m1 0h1m2 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m1 0h3m1 0h1m2 0h2m1 0h3m1 0h1m1 0h3m1 0h1m-29 1h1m5 0h1m1 0h4m5 0h2m3 0h1m5 0h1m-29 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-21 1h5m1 0h1m1 0h1m1 0h1m1 0h1m-21 1h1m1 0h5m2 0h1m1 0h1m5 0h2m1 0h1m1 0h5m-27 1h2m1 0h2m4 0h7m1 0h8m3 0h1m-29 1h2m3 0h2m1 0h2m1 0h1m1 0h3m1 0h1m2 0h2m1 0h1m-24 1h5m2 0h3m3 0h1m1 0h1m2 0h1m2 0h3m1 0h1m1 0h1m-28 1h1m1 0h2m1 0h3m3 0h1m2 0h2m1 0h1m1 0h1m5 0h2m-27 1h1m1 0h1m1 0h2m1 0h6m2 0h1m1 0h4m1 0h3m3 0h1m-27 1h1m2 0h2m1 0h1m1 0h1m4 0h1m2 0h1m1 0h1m2 0h1m1 0h2m-27 1h1m2 0h2m2 0h1m1 0h1m1 0h2m1 0h3m2 0h2m3 0h1m2 0h1m-27 1h4m1 0h3m3 0h1m2 0h1m1 0h1m7 0h2m-27 1h2m2 0h1m2 0h3m3 0h2m1 0h5m1 0h3m1 0h1m1 0h1m-29 1h1m5 0h4m1 0h5m1 0h1m3 0h1m1 0h2m1 0h1m-27 1h1m1 0h1m6 0h1m1 0h1m1 0h1m5 0h2m1 0h1m4 0h1m-28 1h1m1 0h3m1 0h1m2 0h3m2 0h11m1 0h3m-21 1h4m4 0h3m1 0h1m3 0h5m-29 1h7m2 0h1m1 0h1m3 0h3m1 0h2m1 0h1m1 0h3m-27 1h1m5 0h1m1 0h2m1 0h2m1 0h2m4 0h1m3 0h1m-25 1h1m1 0h3m1 0h1m1 0h1m1 0h1m1 0h1m2 0h1m1 0h1m2 0h5m1 0h2m-28 1h1m1 0h3m1 0h1m1 0h2m1 0h1m1 0h2m1 0h1m2 0h1m5 0h4m-29 1h1m1 0h3m1 0h1m1 0h1m1 0h1m1 0h6m1 0h1m2 0h6m-28 1h1m5 0h1m2 0h2m7 0h1m1 0h2m3 0h1m1 0h1m-28 1h7m1 0h1m5 0h2m1 0h1m1 0h1m2 0h2m2 0h1"/></svg></div>
+                <p>Scannen, um die Karte zu öffnen</p>
+                <button type="button" class="qr-close" id="qr-close">Schließen</button>
             </div>
         </div>
-    </div>
+    </main>
 
-    <!--       5    -->
     <script>
-        const contactBtn = document.getElementById('contact-btn');
-        const socialIcons = document.getElementById('social-icons');
+        // ===== نافذة الـ QR =====
+        const qrBtn = document.getElementById('qr-btn');
+        const qrModal = document.getElementById('qr-modal');
+        const qrClose = document.getElementById('qr-close');
 
-        contactBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            socialIcons.classList.toggle('show');
-        });
+        const openQR = () => { qrModal.classList.add('open'); qrModal.setAttribute('aria-hidden', 'false'); };
+        const closeQR = () => { qrModal.classList.remove('open'); qrModal.setAttribute('aria-hidden', 'true'); };
 
-        document.addEventListener('click', () => {
-            socialIcons.classList.remove('show');
-        });
+        qrBtn.addEventListener('click', openQR);
+        qrClose.addEventListener('click', closeQR);
+        qrModal.addEventListener('click', (e) => { if (e.target === qrModal) closeQR(); });
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeQR(); });
 
-        //      5 
+        // ===== Easter Egg: 5 ضغطات على الصورة =====
         const profileImg = document.getElementById('profile-img');
         const profileVideo = document.getElementById('profile-video');
         const infoSection = document.querySelector('.info-section');
         const logoBox = document.querySelector('.logo-box');
         const fadeOverlay = document.querySelector('.fade-overlay');
+        const socialIcons = document.getElementById('social-icons');
 
         let tapCount = 0;
         let tapTimer = null;
 
         profileImg.addEventListener('click', () => {
             tapCount++;
-            
             clearTimeout(tapTimer);
-            tapTimer = setTimeout(() => {
-                tapCount = 0;
-            }, 1000);
+            tapTimer = setTimeout(() => { tapCount = 0; }, 1000);
 
             if (tapCount === 5) {
                 tapCount = 0;
-                
-                //  
-                if (infoSection) infoSection.classList.add('hidden-ui');
-                if (logoBox) logoBox.classList.add('hidden-ui');
-                if (fadeOverlay) fadeOverlay.style.display = 'none';
 
-                //  
-                profileImg.style.display = 'none';
+                // إخفاء الواجهة + الأيقونات تقع لتحت
+                infoSection.classList.add('hidden-ui');
+                logoBox.classList.add('hidden-ui');
+                fadeOverlay.style.display = 'none';
+                socialIcons.classList.remove('rise');
+                socialIcons.classList.add('fall');
+
+                // تشغيل الفيديو
+                profileImg.style.visibility = 'hidden';
                 profileVideo.style.display = 'block';
                 profileVideo.currentTime = 0;
                 profileVideo.play();
             }
         });
 
-        //      
+        // لما الفيديو يخلص: كل حاجة ترجع والأيقونات تطلع من تحت
         profileVideo.addEventListener('ended', () => {
             profileVideo.style.display = 'none';
-            profileImg.style.display = 'block';
-            if (infoSection) infoSection.classList.remove('hidden-ui');
-            if (logoBox) logoBox.classList.remove('hidden-ui');
-            if (fadeOverlay) fadeOverlay.style.display = 'block';
+            profileImg.style.visibility = 'visible';
+            infoSection.classList.remove('hidden-ui');
+            logoBox.classList.remove('hidden-ui');
+            fadeOverlay.style.display = 'block';
+            socialIcons.classList.remove('fall');
+            socialIcons.classList.add('rise');
         });
     </script>
 </body>
