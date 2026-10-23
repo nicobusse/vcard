@@ -36,6 +36,46 @@ body {
     overscroll-behavior: none;
 }
 
+/* سفاري الجديد مبيقراش الخلفية المتدرجة – لازم ألوان صريحة */
+html {
+    background-color: var(--photo-bg);
+}
+
+/* عناصر ثابتة على الحافة: سفاري بيلوّن شريط الساعة وشريط اللينك بلونها */
+.edge-tint {
+    position: fixed;
+    left: 0;
+    right: 0;
+    pointer-events: none;
+}
+
+/* فوق: نفس لون خلفية الصورة – مش باين لأنه فوق خلفيتها بالظبط */
+.edge-top {
+    top: 0;
+    height: 24px;
+    z-index: 1;
+    background-color: var(--photo-bg);
+}
+
+/* تحت: لبني صريح – مستخبي ورا الجزء اللبني وبيملى أي مساحة تحت شريط السفاري */
+.edge-bottom {
+    bottom: 0;
+    height: 140px;
+    z-index: 2;
+    background-color: var(--blue);
+}
+
+@media (min-width: 451px) {
+    html { background-color: var(--blue); }
+    .edge-tint { display: none; }
+}
+
+body {
+    height: 100%;
+    overflow: hidden;
+    overscroll-behavior: none;
+}
+
 /* فوق أبيض (ورا الساعة والبطارية) – تحت لبني (ورا شريط السفاري) */
 html {
     background: linear-gradient(to bottom, var(--photo-bg) 50%, var(--blue) 50%);
@@ -123,11 +163,28 @@ body {
     cursor: pointer;
 }
 
+/* حواف الفيديو بتذوب في الصورة وقت الدمج */
+@property --f {
+    syntax: '<percentage>';
+    inherits: false;
+    initial-value: 0%;
+}
+
 /* الفيديو بياخد الشاشة كلها (بيتقص من الجناب عشان يملاها) */
 #profile-video {
     position: absolute;
     inset: 0;
     z-index: 5;
+    transform-origin: 0 0;
+    --f: 0%;
+    -webkit-mask-image:
+        linear-gradient(to right, transparent 0, #000 var(--f), #000 calc(100% - var(--f)), transparent 100%),
+        linear-gradient(to bottom, transparent 0, #000 calc(var(--f) * 0.5), #000 calc(100% - var(--f) * 2), transparent 100%);
+    -webkit-mask-composite: source-in;
+    mask-image:
+        linear-gradient(to right, transparent 0, #000 var(--f), #000 calc(100% - var(--f)), transparent 100%),
+        linear-gradient(to bottom, transparent 0, #000 calc(var(--f) * 0.5), #000 calc(100% - var(--f) * 2), transparent 100%);
+    mask-composite: intersect;
     width: 100%;
     height: 100%;
     object-fit: cover;

@@ -149,11 +149,56 @@
             }
         });
 
-        // لما الفيديو يخلص: الجزء اللبني يطلع، وبعده الأيقونات تطلع ورا بعض
+        // ===== دمج آخر فريم مع الصورة =====
+        // اتحسبت بمقارنة آخر فريم بالصورة: بكسل الصورة = 1.5433 × بكسل الفيديو (720p) + إزاحة
+        const MATCH = { scale: 1.54328, dx: 15.38, dy: 29.19, videoW: 720 };
+        const profileHeader = document.querySelector('.profile-header');
+
+        function mergeTransform() {
+            const vw = profileVideo.videoWidth, vh = profileVideo.videoHeight;
+            const pw = profileImg.naturalWidth, ph = profileImg.naturalHeight;
+            if (!vw || !pw) return null;
+
+            const box = app.getBoundingClientRect();
+            const head = profileHeader.getBoundingClientRect();
+
+            // الفيديو: object-fit cover + center top على الشاشة كلها
+            const sv = Math.max(box.width / vw, box.height / vh);
+            const vx0 = (box.width - vw * sv) / 2;
+
+            // الصورة: object-fit cover + center top في الجزء اللي فوق
+            const sp = Math.max(head.width / pw, head.height / ph);
+            const px0 = (head.width - pw * sp) / 2;
+            const py0 = head.top - box.top;
+
+            const k = MATCH.scale * (MATCH.videoW / vw) * sp / sv;
+            const tx = px0 + MATCH.dx * sp - k * vx0;
+            const ty = py0 + MATCH.dy * sp;
+            return `translate(${tx}px, ${ty}px) scale(${k})`;
+        }
+
+        // لما الفيديو يخلص: آخر فريم يتحرك لمكان الصورة بالظبط ويذوب فيها،
+        // والجزء اللبني يطلع، وبعده الأيقونات تطلع ورا بعض
         function endVideo() {
+            const t = mergeTransform();
+            if (t) {
+                profileVideo.style.transition =
+                    'transform 0.9s cubic-bezier(0.65, 0, 0.35, 1), --f 0.6s ease 0.2s, opacity 0.45s ease 0.5s, visibility 0s linear 0.95s';
+                profileVideo.style.transform = t;
+                profileVideo.style.setProperty('--f', '9%');
+            }
             app.classList.remove('video-mode');
             socialIcons.classList.remove('fall');
             socialIcons.classList.add('rise');
+
+            setTimeout(() => {
+                profileVideo.style.transition = 'none';
+                profileVideo.style.transform = '';
+                profileVideo.style.removeProperty('--f');
+                void profileVideo.offsetWidth;
+                profileVideo.style.transition = '';
+            }, 1000);
+
             setTimeout(() => {
                 socialIcons.classList.remove('rise');
                 playing = false;
