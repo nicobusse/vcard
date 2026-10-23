@@ -4,6 +4,23 @@
     box-sizing: border-box;
 }
 
+/* الخط محلي بدل Google Fonts */
+@font-face {
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('fonts/montserrat-latin-400-normal.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url('fonts/montserrat-latin-700-normal.woff2') format('woff2');
+}
+
 :root {
     --blue: #008cd2;
     --blue-light: #e0f2fe;
@@ -18,9 +35,18 @@ body {
     overscroll-behavior: none;
 }
 
+/* فوق أبيض (ورا الساعة والبطارية) – تحت لبني (ورا شريط السفاري) */
+html {
+    background: linear-gradient(to bottom, var(--white) 50%, var(--blue) 50%);
+}
+
+@media (min-width: 451px) {
+    html { background: var(--blue); }
+}
+
 body {
-    font-family: 'Montserrat', sans-serif;
-    background-color: var(--blue);
+    font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;
+    background: transparent;
     display: flex;
     justify-content: center;
     -webkit-tap-highlight-color: transparent;
@@ -44,7 +70,11 @@ body {
     top: calc(20px + env(safe-area-inset-top, 0px));
     left: 20px;
     z-index: 10;
-    transition: opacity 0.4s ease-in-out;
+    transition: opacity 0.5s ease;
+}
+
+.video-mode .logo-box {
+    opacity: 0;
 }
 
 .logo-box img {
@@ -71,14 +101,41 @@ body {
     cursor: pointer;
 }
 
+/* الفيديو بياخد الشاشة كلها (بيتقص من الجناب عشان يملاها) */
 #profile-video {
-    display: none;
     position: absolute;
     inset: 0;
+    z-index: 5;
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center top;
+    background: var(--white);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.5s ease 0.5s, visibility 0s linear 1s;
+}
+
+.video-mode #profile-video {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.5s ease 0.3s, visibility 0s;
+}
+
+/* الجزء اللبني كله: بينزل لتحت ويطلع تاني */
+.bottom-panel {
+    flex: 0 0 auto;
+    position: relative;
+    z-index: 6;
+    background: var(--blue);
+    transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.video-mode .bottom-panel {
+    transform: translateY(calc(100% + 30px));
+    /* بيستنى الأيقونات تقع الأول */
+    transition: transform 0.75s cubic-bezier(0.64, 0, 0.78, 0) 0.55s;
 }
 
 .fade-overlay {
@@ -98,11 +155,6 @@ body {
     text-align: center;
     color: var(--white);
     transition: opacity 0.4s ease-in-out;
-}
-
-.hidden-ui {
-    opacity: 0 !important;
-    pointer-events: none;
 }
 
 .name {
@@ -138,7 +190,13 @@ body {
     transition: transform 0.15s ease;
 }
 
-.cta-button i {
+.icon {
+    display: block;
+    height: 1em;
+    width: auto;
+}
+
+.cta-button .icon {
     font-size: 19px;
 }
 
@@ -165,7 +223,7 @@ body {
     background: none;
     border: none;
     color: var(--white);
-    font-size: 26px;
+    font-size: 25px;
     cursor: pointer;
     text-decoration: none;
 }
@@ -184,30 +242,29 @@ body {
     border-radius: 12px;
 }
 
-/* الأيقونات بتقع لتحت (Easter Egg) */
+/* الأيقونات بتقع لتحت ورا بعض (Easter Egg) */
 .social-icons.fall > * {
-    animation: icon-fall 0.7s cubic-bezier(0.55, 0, 1, 0.45) forwards;
-    animation-delay: calc(var(--i) * 80ms);
+    animation: icon-fall 0.65s cubic-bezier(0.55, 0, 0.9, 0.4) both;
+    animation-delay: calc(var(--i) * 90ms);
     pointer-events: none;
 }
 
-/* الأيقونات بتطلع من تحت لما الفيديو يخلص */
+/* الأيقونات بتطلع من تحت ورا بعض – بعد ما الجزء اللبني يرجع */
 .social-icons.rise > * {
-    opacity: 0;
-    animation: icon-rise 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-    animation-delay: calc(var(--i) * 80ms);
+    animation: icon-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: calc(0.6s + var(--i) * 100ms);
 }
 
 @keyframes icon-fall {
     0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
-    18%  { transform: translateY(-10px) rotate(-6deg); opacity: 1; }
-    100% { transform: translateY(160px) rotate(25deg); opacity: 0; }
+    20%  { transform: translateY(-12px) rotate(calc((var(--i) - 1.5) * -4deg)); opacity: 1; }
+    100% { transform: translateY(170px) rotate(calc((var(--i) - 1.5) * 14deg)); opacity: 0; }
 }
 
 @keyframes icon-rise {
-    0%   { transform: translateY(160px); opacity: 0; }
-    70%  { transform: translateY(-8px); opacity: 1; }
-    100% { transform: translateY(0); opacity: 1; }
+    0%   { transform: translateY(70px) scale(0.85); opacity: 0; }
+    65%  { transform: translateY(-7px) scale(1.04); opacity: 1; }
+    100% { transform: translateY(0) scale(1); opacity: 1; }
 }
 
 /* ===== نافذة الـ QR ===== */
@@ -278,12 +335,14 @@ body {
     .title { margin-bottom: 12px; }
     .name { margin-bottom: 4px; }
     .social-icons a,
-    .social-icons button { width: 42px; height: 42px; font-size: 23px; }
+    .social-icons button { width: 42px; height: 42px; font-size: 22px; }
 }
 
 /* احترام إعداد تقليل الحركة */
 @media (prefers-reduced-motion: reduce) {
-    .social-icons.fall > * { animation: none; opacity: 0; }
-    .social-icons.rise > * { animation: none; opacity: 1; }
+    .social-icons.fall > *,
+    .social-icons.rise > * { animation: none; }
+    .bottom-panel,
+    .video-mode .bottom-panel { transition: none; }
     .qr-card { transition: none; }
 }
