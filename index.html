@@ -6,13 +6,16 @@
     <title>Nico Busse – vCard</title>
     <link rel="icon" type="image/png" href="logo.png">
     <meta name="robots" content="noindex, nofollow">
-    <meta name="theme-color" content="#ffffff">
     <!-- كل الخطوط والأيقونات محلية – مفيش أي اتصال بسيرفرات خارجية (DSGVO) -->
     <!-- Icons: Font Awesome Free 6.5.1 by @fontawesome – https://fontawesome.com – License: CC BY 4.0 -->
     <link rel="preload" href="fonts/montserrat-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+    <!-- شريطين ثابتين: سفاري بيلوّن الشريط اللي فوق واللي تحت بلونهم -->
+    <div class="edge-tint edge-top" aria-hidden="true"></div>
+    <div class="edge-tint edge-bottom" aria-hidden="true"></div>
 
     <main class="app-container">
         <!-- اللوجو -->
@@ -27,7 +30,10 @@
         </div>
 
         <!-- الفيديو (Easter Egg) – بياخد الشاشة كلها -->
-        <video id="profile-video" src="intro.webm" playsinline preload="auto"></video>
+        <video id="profile-video" playsinline preload="none">
+            <source src="intro.webm" type='video/webm; codecs="vp9, opus"'>
+            <source src="intro.mp4" type="video/mp4">
+        </video>
 
         <!-- الجزء اللبني كله: بينزل لتحت لما الفيديو يشتغل -->
         <div class="bottom-panel" id="bottom-panel">
@@ -81,30 +87,65 @@
         const profileImg = document.getElementById('profile-img');
         const profileVideo = document.getElementById('profile-video');
         const app = document.querySelector('.app-container');
+        const panel = document.getElementById('bottom-panel');
         const socialIcons = document.getElementById('social-icons');
+
+        const ICONS_DELAY = 550;   // الجزء اللبني بيستنى الأيقونات تقع الأول
 
         let tapCount = 0;
         let tapTimer = null;
         let playing = false;
+        let videoRequested = false;
+        let startedAt = 0;
 
         profileImg.addEventListener('click', () => {
             if (playing) return;
+
+            // أول ضغطة: نبدأ نحمّل الفيديو في الخلفية (مش بيتحمّل غير لو حد بدأ يدوس)
+            if (!videoRequested) {
+                videoRequested = true;
+                profileVideo.poster = 'intro-poster.jpg';
+                profileVideo.preload = 'auto';
+                profileVideo.load();
+            }
+
             tapCount++;
             clearTimeout(tapTimer);
             tapTimer = setTimeout(() => { tapCount = 0; }, 1000);
 
             if (tapCount === 5) {
                 tapCount = 0;
-                playing = true;
-                closeQR();
+                startEgg();
+            }
+        });
 
-                // ١) الأيقونات تقع ورا بعض  ٢) الجزء اللبني ينزل  ٣) الفيديو ياخد الشاشة
-                socialIcons.classList.remove('rise');
-                socialIcons.classList.add('fall');
-                app.classList.add('video-mode');
+        function startEgg() {
+            playing = true;
+            startedAt = performance.now();
+            closeQR();
 
-                profileVideo.currentTime = 0;
-                profileVideo.play().catch(endVideo);
+            // ١) الأيقونات تقع ورا بعض على طول
+            socialIcons.classList.remove('rise');
+            socialIcons.classList.add('fall');
+
+            // ٢) الفيديو يشتغل (لازم جوه الضغطة عشان الأيفون يسمح بالصوت)
+            profileVideo.currentTime = 0;
+            profileVideo.play().catch(endVideo);
+        }
+
+        // ٣) الفيديو ميظهرش غير لما أول فريم يتعرض فعلًا – كده مفيش شاشة بيضا
+        function revealVideo() {
+            if (!playing || app.classList.contains('video-mode')) return;
+            const waited = performance.now() - startedAt;
+            panel.style.setProperty('--panel-delay', Math.max(0, ICONS_DELAY - waited) + 'ms');
+            app.classList.add('video-mode');
+        }
+
+        profileVideo.addEventListener('playing', () => {
+            if ('requestVideoFrameCallback' in profileVideo) {
+                profileVideo.requestVideoFrameCallback(revealVideo);
+            } else {
+                profileVideo.addEventListener('timeupdate', revealVideo, { once: true });
             }
         });
 
@@ -120,6 +161,7 @@
         }
 
         profileVideo.addEventListener('ended', endVideo);
+        profileVideo.addEventListener('error', () => { if (playing) endVideo(); }, true);
     </script>
 </body>
 </html>

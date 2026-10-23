@@ -25,6 +25,7 @@
     --blue: #008cd2;
     --blue-light: #e0f2fe;
     --white: #ffffff;
+    --photo-bg: #f3f4f8;   /* نفس درجة خلفية الصورة بالظبط */
 }
 
 /* الصفحة كلها شاشة واحدة بالظبط – مفيش سكرول على أي تليفون */
@@ -37,11 +38,32 @@ body {
 
 /* فوق أبيض (ورا الساعة والبطارية) – تحت لبني (ورا شريط السفاري) */
 html {
-    background: linear-gradient(to bottom, var(--white) 50%, var(--blue) 50%);
+    background: linear-gradient(to bottom, var(--photo-bg) 50%, var(--blue) 50%);
+}
+
+/* شريطين ثابتين على الحافة: سفاري الجديد بيلوّن شريط الساعة وشريط اللينك بلونهم */
+.edge-tint {
+    position: fixed;
+    left: 0;
+    right: 0;
+    height: 2px;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.edge-top {
+    top: 0;
+    background: var(--photo-bg);
+}
+
+.edge-bottom {
+    bottom: 0;
+    background: var(--blue);
 }
 
 @media (min-width: 451px) {
     html { background: var(--blue); }
+    .edge-tint { display: none; }
 }
 
 body {
@@ -88,7 +110,7 @@ body {
     flex: 1 1 auto;
     min-height: 0;
     position: relative;
-    background-color: var(--white);
+    background-color: var(--photo-bg);
     overflow: hidden;
 }
 
@@ -110,7 +132,7 @@ body {
     height: 100%;
     object-fit: cover;
     object-position: center top;
-    background: var(--white);
+    background: transparent;
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
@@ -120,7 +142,7 @@ body {
 .video-mode #profile-video {
     opacity: 1;
     visibility: visible;
-    transition: opacity 0.5s ease 0.3s, visibility 0s;
+    transition: opacity 0.35s ease, visibility 0s;
 }
 
 /* الجزء اللبني كله: بينزل لتحت ويطلع تاني */
@@ -135,7 +157,7 @@ body {
 .video-mode .bottom-panel {
     transform: translateY(calc(100% + 30px));
     /* بيستنى الأيقونات تقع الأول */
-    transition: transform 0.75s cubic-bezier(0.64, 0, 0.78, 0) 0.55s;
+    transition: transform 0.75s cubic-bezier(0.64, 0, 0.78, 0) var(--panel-delay, 0.55s);
 }
 
 .fade-overlay {
@@ -143,7 +165,7 @@ body {
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 90px;
+    height: 80px;
     background: linear-gradient(to bottom, rgba(0, 140, 210, 0) 0%, var(--blue) 100%);
     pointer-events: none;
 }
@@ -151,7 +173,7 @@ body {
 /* ===== الاسم والزرار ===== */
 .info-section {
     flex: 0 0 auto;
-    padding: 4px 25px 0;
+    padding: 0 25px;
     text-align: center;
     color: var(--white);
     transition: opacity 0.4s ease-in-out;
@@ -160,16 +182,17 @@ body {
 .name {
     font-size: clamp(22px, 3.6vh, 28px);
     font-weight: 700;
-    margin-bottom: 6px;
+    line-height: 1.15;
+    margin-bottom: 4px;
 }
 
 .title {
     font-size: clamp(11px, 1.8vh, 14px);
     font-weight: 400;
-    line-height: 1.45;
+    line-height: 1.3;
     color: var(--blue-light);
     letter-spacing: 1px;
-    margin-bottom: clamp(14px, 2.6vh, 24px);
+    margin-bottom: clamp(12px, 1.9vh, 16px);
     text-transform: uppercase;
 }
 
@@ -182,7 +205,7 @@ body {
     background: var(--white);
     color: var(--blue);
     text-decoration: none;
-    padding: clamp(12px, 2vh, 16px);
+    padding: clamp(11px, 1.6vh, 13px);
     border-radius: 50px;
     font-size: 17px;
     font-weight: 700;
@@ -210,7 +233,7 @@ body {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    padding: clamp(16px, 2.8vh, 26px) 30px calc(clamp(14px, 2.4vh, 22px) + env(safe-area-inset-bottom, 0px));
+    padding: clamp(8px, 1.4vh, 12px) 30px calc(clamp(6px, 1.2vh, 10px) + env(safe-area-inset-bottom, 0px));
 }
 
 .social-icons a,
